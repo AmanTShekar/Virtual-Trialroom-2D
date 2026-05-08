@@ -9,7 +9,8 @@
 import { useCallback, useRef } from "react";
 import { useStore } from "../store/trialRoomStore";
 
-const API_BASE = "http://192.168.1.4:8081";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+const API_KEY = import.meta.env.VITE_API_KEY || "";
 
 // ── Client-side color extraction (canvas-based, instant) ────────────────────
 function extractDominantColors(imageElement, numColors = 6) {
@@ -125,6 +126,9 @@ export function usePhotoAnalysis() {
 
         const response = await fetch(`${API_BASE}/api/v5/analyze-photo`, {
           method: "POST",
+          headers: {
+            "X-API-Key": API_KEY
+          },
           body: formData,
           signal: abortRef.current.signal,
         });
